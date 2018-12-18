@@ -1,0 +1,33 @@
+body{
+    background:#dddddd;
+}
+
+.content{
+    background:#ffffff;
+    padding: 10px 10px;
+}
+
+.showTable{
+    padding: 20px;
+}
+
+.sentence{
+    padding: 20px;
+}
+
+h2 {
+    border-left: solid 7px #bb0000 ;
+    padding:0px 7px;   
+}
+
+.coding{
+    background-color: #eeeeee;
+    padding:0px 10px;
+    border-radius: 10px;
+}
+
+/*
+code {
+    font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  }
+  */
