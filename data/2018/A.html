@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>ACM-ICPCの解説ページ</title>
+    <title> 2018-A</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!--<link="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" type="text/css" href="../design.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -16,33 +18,57 @@
     <![endif]-->
   </head>
   <body>
-    <h1>はじめに</h1>
-    <p>ACM-ICPCの過去問の解説をまとめたサイトを目指しています。各年度ごとに問題がまとまっています。</p>
-    
-    <table class="table table-striped" style="padding:10px">
-        <thead>
-            <tr>
-                <th>年度</th>
-                <th>A問題</th>
-                <th>B問題</th>
-                <th>C問題</th>
-                <th>D問題</th>
-                <th>E問題</th>
-                <th>F問題</th>
-                <th>G問題</th>
-                <th>H問題</th>
-            </tr>
-        </thead>
-        <tbody>
-            <th>2018</th>
-            <th><a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1624?year=2018">所得格差</a></th>
-        </tbody>
-    </table>
+    <div class="content">
+        <h2>問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1624?year=2018" target="_blank">所得格差</a></h2>
+        <h2>問題の概要</h2>
+        <p>数列が与えられるので、その全要素の平均以下の値を持つ要素数を求める。</p>
+
+        <h2>解説</h2>
+        <p>入力を数列に格納し、一旦全ての値を足して平均を取ったあと、条件を満たす要素数を求めます。<br>求まる平均は必ずしも整数であるとは限らないので、合計を貯めるための変数はdoubleなどの浮動小数点型にすることに注意です。</p>
+        <p>また、「0」が来たら終了という処理は、while文を使って以下のように書けます。</p>
+<div class="coding"><pre><code class="prettyprint">
+int n;
+while(cin&gt;&gt;n &amp;&amp; n){
+    //処理
+
+}
+    </code></pre></div>
+        <p>これを踏まえて、解答例は以下のようになる。</p>
+<div class="coding"><pre><code class="prettyprint">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main (){
+    int n;
+    while(cin&gt;&gt;n &amp;&amp; n){
+        vector&lt;int&gt; v(n);
+        double sum=0;
+        for(int i=0;i&lt;n;i++){//入力を受けてまずは合計を求める
+            cin&gt;&gt;v[i];
+            sum+=v[i];
+        }
+        sum/=n;//平均を出して
+
+        int ans=0;
+        for(int i=0;i&lt;n;i++){
+            if(sum&gt;=v[i])ans++;//i番目について、平均以下ならansを増やす
+        }
+        cout&lt;&lt;ans&lt;&lt;endl;
+    }
+}
+    </code></pre></div>
+    </div>
     
 
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="./site.js"></script>
   </body>
+  <fotter>
+      <p></p>
+  </fotter>
 </html>
