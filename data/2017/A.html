@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>2017-A</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../design.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="content">
+        <a href="../../index.html">トップに戻る</a>
+        <h2>問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1616?year=2017" target="_blank">太郎君の買い物</a></h2>
+        <h2>問題の概要</h2>
+        <p>長さnの数列から、任意の２つの要素を取り出せる。この要素の和がm以下の範囲での最大値を求める。</p>
+
+        <h2>解説</h2>
+        <p>まず最初に、nとmが0 0になるまで入力を受け取るという部分は、以下のように書けます。</p>
+        <div class="coding"><pre><code class="prettyprint">
+int n,m;
+while(cin&gt;&gt;n&gt;&gt;m &amp;&amp; n &amp;&amp; m){
+  //処理
+}
+        </code></pre></div>
+        <p>さて、計算量の話として、今回nは1000を超えないので２重ループを回しても計算量は10<sup>6</sup>となり間に合いそうであることが分かります。</p>
+        <p>最初、出力用の変数ansを用意し、0で初期化します。ここで２重ループのループ変数をi,jとすれば、i≠j の時、数列のi番目とj番目の要素の和を見て、それがm以下であればansとの最大値を取ります。これを繰り返すことで、答えが求まります。i≠jとしているのは、もしi=jを許すと同じ商品を２つ買うことになり、問題の設定に反するからです。<br>最後に、ansが0のままなら、求める組み合わせが見つからなかったということなので、"NONE"を出力します。</p>
+        <p>この解法では、考えられる２つの要素の取り方を全て試すことになるので、全探索という手法になります。全探索は計算量こそ多いですが、実装やアルゴリズムが簡単なので小さい要素数に対して絶大な効果を発揮します。</p>
+<div class="coding"><pre><code class="prettyprint">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main (){
+  int n,m;
+  while(cin&gt;&gt;n&gt;&gt;m &amp;&amp; n &amp;&amp; m){
+    int ans=0;
+    vector&lt;int&gt; v(n);
+    for(int i=0;i&lt;n;i++)cin&gt;&gt;v[i];
+
+    for(int i=0;i&lt;n;i++){
+      for(int j=0;j&lt;n;j++){
+        if(i!=j &amp;&amp; v[i]+v[j]&lt;=m){ //同じ要素でなく、かつ和がm以下なら
+          ans=max(ans,v[i]+v[j]); //ansとの最大値を取る
+        }
+      }
+    }
+    if(ans==0)cout&lt;&lt;&quot;NONE&quot;&lt;&lt;endl;
+    else cout&lt;&lt;ans&lt;&lt;endl;
+  }
+}
+    </code></pre></div>
+    <a href="../../index.html">トップに戻る</a>
+    </div>
+    
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    <script type="text/javascript" src="./site.js"></script>
+  </body>
+  <fotter>
+      <p></p>
+  </fotter>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>2017-B</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../design.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="content">
+        <a href="../../index.html">トップに戻る</a>
+        <h2>問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1617?year=2017" target="_blank">ほとんど同じプログラム</a></h2>
+        <h2>問題の概要</h2>
+        <p>2つの文字列が与えられる。"文字列定数"を、奇数番目の<code>"</code>と偶数番目の<code>"</code>で挟まれた文字列とする。この時、２つの文字列が完全に一致なら"IDENTICAL"、文字列定数１つだけの違いなら"CLOSE"、それ以外なら"DIFFERENT"を出力する。</p>
+
+        <h2>解説</h2>
+        <p>まずは文字列定数をしっかりと把握するところからです。文字列定数は<code>"</code>によって区切られているので、入力例の２個目のデータセットを借りれば</p>
+        <p> read"<span style="background-color: rgb(209, 132, 132)"> B1input</span> ";solve;output</p>
+        <p> read"<span style="background-color: rgb(209,132,132)"> B2</span> ";solve;output</p>
+        <p>と可視化できます。ここで、薄い赤になっている部分が文字列定数の部分です。このように、文字列定数とそうでない部分が交互に現れることになります。</p>
+        <p><br>さて、これをどう処理するかですが、あらかじめ<code>"</code>で分けることができれば楽に処理できそうです。例えば、<code>print"hello";print123</code>を、<code>v[0]="print", v[1]="hello",v[2]=";print123"</code>のように配列に分けて格納できれば、文字列定数である部分とそうでない部分の判別は、配列の添字の偶奇を見るだけで済みます。</p>
+        <p>この「分ける」ことは、いわゆるsplitを行うことで実現できますが、pythonなどでは標準であるsplit()はC++にはありません。よって最後に示すように自前で実装しました。<code>"</code>を見つける度に、それまで溜めておいた文字列を配列に追加します。</p>
+        <p><br>次に謝り箇所の扱いです。IDENTICALの場合は、単純に２つの文字列を==で繋げば判定できます。IDENTICALの定義は、「２つの文字列が完全に一致している」ことです。</p>
+        <p>また、そもそも<code>"</code>の数が異なれば、文字列定数以外の部分が異なることが確定するのでDIFFERENTです。これは、split()した後の配列の要素数を見れば分かります。</p>
+        <p>問題は両方の<code>"</code>の数が同じ時の、CLOSEとDIFFERENTの見分け方です。</p>
+        <ul>
+          <li>CLOSE：文字列定数のうちどこか１箇所だけが異なる</li>
+          <li>DIFFERENT：文字列定数が２つ以上異なる、もしくは文字列定数でない部分が１箇所以上異なる</li>
+        </ul>
+        <p>ことに注意すると、ある変数(以下のコードではcount)を0で初期化し、文字列定数の間違いがあるごとに１足す、文字列定数以外の間違いがあるごとに２足す　ことにより、最終的にcount==1であればCLOSE、それ以外ならDIFFERENTであると判定できます。</p>
+
+
+<div class="coding"><pre><code class="prettyprint">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+//入力を&#x27;"&#x27;で分けて、配列に格納して返す関数
+vector&lt;string&gt; split(string s){
+  vector&lt;string&gt; ret;
+  string t=&quot;&quot;;
+  for(int i=0;i&lt;s.size();i++){
+    if(s[i]=='&quot;'){
+      ret.push_back(t);
+      t=&quot;&quot;;
+    }
+    else t+=s[i];
+  }
+  ret.push_back(t);
+  return ret;
+}
+
+int main (){
+  string s,t;
+  while(cin&gt;&gt;s &amp;&amp; s!=&quot;.&quot;){
+    cin&gt;&gt;t;
+    if(s==t){ //文字列が一致すればIDENTICAL
+      cout&lt;&lt;&quot;IDENTICAL&quot;&lt;&lt;endl;
+      continue;
+    }
+    vector&lt;string&gt; spl_s=split(s);
+    vector&lt;string&gt; spl_t=split(t);
+    if(spl_s.size()!=spl_t.size()){ //split()した後の配列要素数が違えばDIFFERENT。
+      cout&lt;&lt;&quot;DIFFERENT&quot;&lt;&lt;endl;
+      continue;
+    }
+    int count=0;
+    for(int i=0;i&lt;spl_s.size();i++){
+      if(i%2==1){ //文字列定数
+        if(spl_s[i]!=spl_t[i])count++; //違えば１足す
+      }else { //文字列定数でない
+        if(spl_s[i]!=spl_t[i])count+=2; //違えば２足す
+      }
+    }
+    if(count==1)cout&lt;&lt;&quot;CLOSE&quot;&lt;&lt;endl;
+    else cout&lt;&lt;&quot;DIFFERENT&quot;&lt;&lt;endl;
+  }
+
+}
+    </code></pre></div>
+    <a href="../../index.html">トップに戻る</a>
+    </div>
+    
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="./site.js"></script>
+  </body>
+  <fotter>
+      <p></p>
+  </fotter>
+</html>

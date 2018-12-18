@@ -1,10 +1,22 @@
 body{
     background:#dddddd;
+    
+}
+
+.indexcontent{
+    background:#ffffff;
+    padding: 10px 10px;
 }
 
 .content{
     background:#ffffff;
     padding: 10px 10px;
+    width:50%;
+    /*
+    margin-right:auto;
+    margin-left:auto;
+    */
+    margin:auto;
 }
 
 .showTable{
@@ -24,6 +36,7 @@ h2 {
     background-color: #eeeeee;
     padding:0px 10px;
     border-radius: 10px;
+    font-size:16px;
 }
 
 /*
