@@ -46,8 +46,7 @@
         </p>
         <p>以下のコードを参考に、今回のアルゴリズムを考えてみてください。</p>
         
-<div class="coding"><pre><code class="prettyprint">
-#include &lt;iostream&gt;
+<div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;string&gt;
 using namespace std;
@@ -70,8 +69,8 @@ int main (){
       }
     }
   }
-}
-    </code></pre></div>
+}</code></pre></div>
+    <p>右端を伸ばすところは<code>while(1)</code>でやってしまってます。これは答えとなるような区間が必ず存在する<span style="color:rgb(100,100,100)">(=いつかbreakされる)</span>からできることなので、不安なら<br><code>for(int right=0;right<=1000000000;right++)のようにしても良いかもしれません。</code></p>
     <a href="../../index.html">トップに戻る</a>
     </div>
     
