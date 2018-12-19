@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title></title>
+    <title>2018-C</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
 
@@ -18,13 +18,61 @@
   </head>
   <body>
     <div class="content">
-        <h2>問題: <a href="8" target="_blank"></a></h2>
+        <a href="../../index.html">トップに戻る</a>
+        <h2>ACM-ICPC 2018-C 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1626?year=2018" target="_blank">超高層ビル「みなとハルカス」</a></h2>
         <h2>問題の概要</h2>
-        <p></p>
+        <p>1,2,3,...,10<sup>9</sup>と続く数列がある。この数列の連続する部分列であって、その全ての要素の和がnとなるような最大の長さのものを求めよ。</p>
 
         <h2>解説</h2>
+        <p>しゃくとり法というアルゴリズムを使います。しゃくとり法は、「数列の連続したホゲホゲ」みたいな設定の問題にマッチしやすい解法です。範囲の左端と右端を持ち、右端を伸ばしながら、条件を超えたら左端を縮めるということを繰り返します。</p>
+        <p>そこで、まずは以下の補題を解くことにします。</p>
+        <div class="coding">
+          <span style="font-size:20px">補題</span><br>数列<code>{1,2,3,4,5}</code>のある連続する区間について、区間の総和が7となるようなものを求めよ。
+        </div>
+        <p>区間の左端の添字をleft、右端の添字をright、[left,right]の区間の総和をsumとすると、以下のように解くことができます。</p>
+        <ul>
+          <li><code>1, 2, 3, 4, 5   (left=0, right=0, sum=0 (sum &lt; 7))</code></li>
+          <li><code><span style="background-color:rgb(248, 179, 179)">1</span>, 2, 3, 4, 5   (left=0, right=1, sum=1 (sum &lt; 7))</code></li>
+          <li><code><span style="background-color:rgb(248, 179, 179)">1, 2</span>, 3, 4, 5   (left=0, right=2, sum=3 (sum &lt; 7))</code></li>
+          <li><code><span style="background-color:rgb(248, 179, 179)">1, 2, 3</span>, 4, 5   (left=0, right=3, sum=6 (sum &lt; 7))</code></li>
+          <li><code><span style="background-color:rgb(248, 179, 179)">1, 2, 3, 4</span>, 5   (left=0, right=4, sum=10 (sum &gt; 7))</code></li>
+          <li><code>1,<span style="background-color:rgb(248, 179, 179)"> 2, 3, 4</span>, 5   (left=1, right=4, sum=9 (sum &gt; 7))</code></li>
+          <li><code>1, 2,<span style="background-color:rgb(248, 179, 179)"> 3, 4</span>, 5   (left=2, right=4, sum=7 (sum == 7))</code></li>
+        </ul>
+        <p>目標となる7と<code>sum</code>を比べて、sum &lt; 7であれば右端を広げて、sum &gt; 7であれば左端を縮めます。</p>
+        <br>
+        <p>さて、この補題において、数列を{1,2,3,...,10<sup>9</sup>}、目標の値が入力となったものが今回の問題です。あらかじめ数列を配列として持つことは計算量的にできないので、単純に値を持ちながら実装します。
+          <br>区間の左端の値low、右端をhighとすると、ある区間について一番下の階はlow、そこからの高さはhigh-low+1となるので、これを出力とします。
+        </p>
+        <p>以下のコードを参考に、今回のアルゴリズムを考えてみてください。</p>
+        
 <div class="coding"><pre><code class="prettyprint">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main (){
+  int n;
+  while(cin&gt;&gt;n &amp;&amp; n){ //nが0になるまで入力を受ける
+    int left=1,right=0;
+    int sum=0;
+    while(1){ //右端を1つずつ広げていく
+      right++;
+      sum+=right;
+      while(sum&gt;n){ //条件を超えれば、超えなくなるまで左端を縮める
+        sum-=left;
+        left++;
+      }
+      if(sum==n){ //一致したら出力して終了
+        cout&lt;&lt;left&lt;&lt;&quot; &quot;&lt;&lt;right-left+1&lt;&lt;endl;
+        break;
+      }
+    }
+  }
+}
     </code></pre></div>
+    <a href="../../index.html">トップに戻る</a>
     </div>
     
 
