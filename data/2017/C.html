@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title></title>
+    <title>ACM-ICPC 2017-C 池のある庭園</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
 
@@ -18,13 +18,86 @@
   </head>
   <body>
     <div class="content">
-        <h2>問題: <a href="8" target="_blank"></a></h2>
+        <h2>ACM-ICPC 2017-C 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1618?year=2017" target="_blank">池のある庭園</a></h2>
         <h2>問題の概要</h2>
-        <p></p>
+        <p>マスに区切られた2次元のフィールドがある。ここから、ある2次元空間を抜き出した時、その内部から水を貯めることで得られるスコアが最大となるような空間を求めよ。</p>
 
         <h2>解説</h2>
-<div class="coding"><pre><code class="prettyprint">
-    </code></pre></div>
+        <p>まず、制約が<code>3 &lt; d,w &lt; 10</code>であることから、<code>O(n<sup>6</sup>)</code>、もしくは<code>O(n!)</code>などが通るので、全探索解になりそうだなあ、ということが分かります。よって、結構何でもアリな実装ができそうです。</p>
+        <p>さて、ここでの答えというのは、入力で与えられた2次元マスから3*3以上の大きさで、どこかを抜き出したものになります。<br>さらに制約的にも、入力で与えられた2次元マスのうち「どの範囲を抜き出すか」ということは全探索できそうです。<br>ということで、以下の流れで解くことになります。</p>
+        <ol>
+          <li>範囲の抜き出し方を全探索</li>
+          <li>各範囲について壁の高さの最小値を求める</li>
+          <li>抜き出した範囲は池の定義に沿っているか</li>
+          <li>求めた最小値を利用し、実際に入る水の量を求める</li>
+        </ol>
+        この３つの処理が存在し、各処理は全て<code>O(n<sup>2</sup>)</code>で行えます。よって、全体では<code>O(n<sup>6</sup>)</code>となり、十分間に合います。
+
+        <h3>1. 範囲の抜き出し方を全探索</h1>
+        <p>これは４重ループになります。求める範囲の左上の頂点を(x,y)、そこから縦,横にどれだけ伸ばすかを全探索します。</p>
+
+        <h3>2. 各範囲について壁の高さの最小値を求める</h1>
+        <p>これは２重ループになります。以下の画像に示す範囲を全て見たいのですが、結局、全てのマスについて見る中で<code> x==左端 || x==右端 || y==上端 || y==下端 </code>を満たすような座標(x,y)が当てはまります。このような座標について、最小値を取っていきます。このようにして得られた値を、今後の説明のため<code>H<sub>min</sub></code>とおきます。</p>
+
+        <h3>3.抜き出した範囲は池の定義に沿っているか</h3>
+        <p>問題文にもあるように、<code>H<sub>min</sub>=3</code>であり、その内部にも高さ3のマスが存在する時、それは池とは見なされませんでした。よって範囲内の全てのマスについて、<code>H<sub>min</sub></code> &gt; (あるマスの高さ) かどうかを判定します。</p>
+
+        <h3>4.求めた最小値を利用し、実際に入る水の量を求める</h3>
+        <p>あるマスについて、水の入る量は<code>H<sub>min</sub></code> - (あるマスの高さ) で求まります。これを全てのマスで行い、総和を取ります。</p>
+
+        <p>これを全ての範囲について行い、最大値を出力します。</p>
+
+<div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+int main (){
+int h,w;
+  while(cin&gt;&gt;h&gt;&gt;w &amp;&amp; h &amp;&amp; w){
+    vector&lt;vector&lt;int&gt;&gt; v(h,vector&lt;int&gt;(w,0));
+    for(int i=0;i&lt;h;i++)for(int j=0;j&lt;w;j++) cin&gt;&gt;v[i][j];
+    int ans=0;
+
+    for(int y=0;y&lt;10;y++){ //範囲の左上の頂点のx座標
+      for(int x=0;x&lt;10;x++){ //範囲の左上の頂点のy座標
+        for(int height=2;height&lt;10;height++){ //(x,y)から縦にどれだけの範囲か
+          for(int width=2;width&lt;10;width++){ //(x,y)から横にどれだけの範囲か
+              if(y+height&gt;h-1 || x+width&gt;w-1) continue; //範囲がフィールドからはみ出したらダメ
+              int min_height=1000000000;
+
+              //壁の高さの最小値を求める。このとき、範囲は(x,y,x+width,y+height)である。
+              for(int wally=y;wally&lt;=y+height;wally++){
+                for(int wallx=x;wallx&lt;=x+width;wallx++){
+                  if(wally==y || wally==y+height || 
+                          wallx==x || wallx==x+width) min_height=min(min_height,v[wally][wallx]);
+                }
+              }
+
+              //池の定義に沿っているか調べる
+              bool height_ok=true;
+              for(int yy=y+1;yy&lt;y+height;yy++){
+                for(int xx=x+1;xx&lt;x+width;xx++){
+                  if(min_height &lt;= v[yy][xx]) height_ok=false;
+                }
+              }
+              if(!height_ok)continue;
+              
+              //実際に入る水の量を求める
+              int water=0;
+              for(int yy=y+1;yy&lt;y+height;yy++){
+                for(int xx=x+1;xx&lt;x+width;xx++){
+                  water+=min_height - v[yy][xx];
+                }
+              }
+
+              //ansを更新
+              ans=max(ans,water);
+          }
+        }
+      }
+    }
+    cout&lt;&lt;ans&lt;&lt;endl;
+  }
+}</code></pre></div>
     </div>
     
 
