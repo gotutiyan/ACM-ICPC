@@ -18,13 +18,44 @@
   </head>
   <body>
     <div class="content">
-        <h2>問題: <a href="8" target="_blank"></a></h2>
+        <a href="../../index.html">トップに戻る</a>
+        <h2>2016-A 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1608?year=2016" target="_blank">被験者の選定</a></h2>
         <h2>問題の概要</h2>
-        <p></p>
+        <p>N個の数字が与えられるので、任意の2つの値を取り出した時の差の最小値を求めよ。</p>
 
         <h2>解説</h2>
-<div class="coding"><pre><code class="prettyprint">
-    </code></pre></div>
+        <p>ある要素Aを１つ取ってきて、自分以外の全ての値とAとの差を取る、ということを、Aを全ての要素に変えながら行います。つまり、考えられる全通りを試すわけです。</p>
+        <p>このような手法を全探索と呼びます。今回は<code>1&lt;n&lt;1000</code>なので、<code>O(n<sup>2</sup>)</code>解が通ります。よってループを２重で回しながら、i番目とj番目の差を見て、答えを更新します。差はあくまで絶対値なのでabs()を使いましょう。</p>
+
+        <p>また、「0」が来たら終了という処理は、while文を使って以下のように書けます。これはC++において<code>if(0)</code>のように条件式に0が入れば、その条件式は必ずfalseになり実行されないことを利用しています。</p>
+<div class="coding"><pre><code class="prettyprint">int n;
+while(cin&gt;&gt;n &amp;&amp; n){
+    //処理
+
+}</code></pre></div>
+        <p>これを踏まえて、解答例は以下のようになります。</p>
+<div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main (){
+  int n;
+  while(cin&gt;&gt;n &amp;&amp; n){
+    vector&lt;int&gt; v(n);
+    int ans=1000000000;
+    for(int i=0;i&lt;n;i++)cin&gt;&gt;v[i];
+
+    //全探索
+    for(int i=0;i&lt;n;i++){
+      for(int j=0;j&lt;n;j++){
+        //自分自身との比較(i==jがそれ)は避けながら、差を取って答えを更新
+        if(i!=j)ans=min(ans,abs(v[i]-v[j]));
+      }
+    }
+    cout&lt;&lt;ans&lt;&lt;endl;
+  }
+}</code></pre></div>
+<a href="../../index.html">トップに戻る</a>
     </div>
     
 
