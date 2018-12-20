@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title></title>
+    <title>2016-B 当選者を探せ</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
 
@@ -18,13 +18,56 @@
   </head>
   <body>
     <div class="content">
-        <h2>問題: <a href="8" target="_blank"></a></h2>
+        <a href="../../index.html">トップに戻る</a>
+        <h2>2016-B 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1609?year=2016" target="_blank">当選者を探せ</a></h2>
         <h2>問題の概要</h2>
-        <p></p>
+        <p>整数Nと文字がN個与えられる。A-Zの26名の候補者に入力の順で投票をする時、勝敗が決定した瞬間の勝者と開票数を求めよ。最後まで決まらない時、<code>"TIE"</code>を出力せよ。</p>
 
         <h2>解説</h2>
-<div class="coding"><pre><code class="prettyprint">
-    </code></pre></div>
+        <p><code>i</code>票目まで開票した場合を考えます。この時、残りの票数は<code>N-i</code>です。この<code>N-i</code>票で、他の参加者が現在トップの得票数を誇る候補者を逆転できるかどうかを調べたいわけです。</p>
+        <p>ここで得票数トップの候補者を逆転できる一番の可能性を持つのは、2番目に得票数の多い候補者です。よってこの２番手の候補者に<code>N-i</code>を全て乗せてみたときに、トップの候補者を超えるかどうか調べればよく、これは((トップの得票数)ー（2番手の得票数))&gt;<code>N-i</code>で調べることができます。これを満たせばその時点で逆転不可能なことが分かります。 </p>
+        <p>実装としては、票数を管理する長さ26の配列を用意し、入力の文字<code>C</code>を利用して<code>[C-&#x27;A&#x27;]++</code>とすれば、配列の<code>[0,1,2,...,25]</code>に候補者<code>[A,B,C,...,Z]</code>が対応します。トップの得票数や2番目の得票数を得るには、この数列を<span style="color:red">降順</span>ソートして、0番目と1番目の要素を見れば良いです。</p>
+        <p>ですが、単に得票数だけ持った数列をソートしても、トップや2番手の得票数は得られますが、その候補者が誰なのは分かりません。よって、構造体やstd::pairなどを利用して、得票数と候補者を常に紐つけておく必要があります。</p>
+        <p>ここでさらに問題が起きて、構造体やpairなどを作ったはいいけど、それをどう降順ソートするかです。algorithmヘッダにある<code>sort()</code>でクイックソートを行ってくれますが、標準では昇順ソートです。<br>解決策として、sortには比較関数を渡すことができるので、ソートにおける交換条件を与えることができます。この比較関数に「得票数を昇順に」ということを書いてやれば良いです。</p>
+<div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+struct Pair{
+  int vote=0; //得票数
+  char name; //候補者名
+};
+
+//得票数を基準に降順ソートするための比較関数。
+//基本的に、return a&gt;b ; とすると降順、return a&lt;bとすると昇順になる。
+bool cmp(Pair p1, Pair p2){ 
+  return p1.vote&gt;p2.vote;
+}
+
+int main (){
+  int n;
+  while(cin&gt;&gt;n &amp;&amp; n){
+    bool isTIE=true; //TIEと出力する必要があるかどうか
+    vector&lt;Pair&gt; v(26); 
+    vector&lt;char&gt; c(n);
+    for(int i=0;i&lt;26;i++)v[i].name='A'+i; //候補者名を設定
+    for(int i=0;i&lt;n;i++)cin&gt;&gt;c[i]; 
+
+    for(int i=0;i&lt;n;i++){
+      v[c[i]-'A'].vote++;
+      vector&lt;Pair&gt; temp_v=v;
+      sort(temp_v.begin(),temp_v.end(),cmp);  //上で書いた比較関数cmpを使って降順ソート
+      if(temp_v[0].vote-temp_v[1].vote&gt;n-i-1){ //(トップ)-(2番手)&gt;n-iなら出力して終了
+        cout&lt;&lt;temp_v[0].name&lt;&lt;&quot; &quot;&lt;&lt;i+1&lt;&lt;endl;
+        isTIE=false;
+        break;
+      }
+    }
+    if(isTIE)cout&lt;&lt;&quot;TIE&quot;&lt;&lt;endl;
+  }
+} </code></pre></div>
+<a href="../../index.html">トップに戻る</a>
     </div>
     
 
