@@ -1,3 +1,7 @@
+*{
+    font-family: sans-serif;
+}
+
 body{
     background:#dddddd;
 }
@@ -44,6 +48,10 @@ h2 {
     font-size:16px;
     line-height: 25px;
     overflow:scroll;
+}
+code{
+    -moz-tab-size: 2 ;	/* Firefox用 */
+	tab-size: 2 ;
 }
 
 /*

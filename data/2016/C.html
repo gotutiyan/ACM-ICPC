@@ -66,7 +66,7 @@
 using namespace std;
 
 //エラトステネスの篩をしつつ、(区画数+1)番目の（実質）素数を返す関数
-int hurui(vector&lt;bool&gt;&amp; isPrime, int m, int n){ //nが区画数、mは範囲の下限
+int hurui(vector&lt;bool&gt;&amp; isPrime, int m, int n){ //、mは範囲の下限、nは区画数
   int count=0; //何回素数を見つけたか
   for(int i=m;i&lt;=7368791+1;i++){ //[m-max]の範囲で篩にかける
     if(isPrime[i]){ //素数iを見つけたら
