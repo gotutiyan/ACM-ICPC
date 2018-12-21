@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title></title>
+    <title>2016-C 竹の花</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
 
@@ -18,13 +18,77 @@
   </head>
   <body>
     <div class="content">
-        <h2>問題: <a href="8" target="_blank"></a></h2>
+        <a href="../../index.html">トップに戻る</a>
+        <h2>2016-C 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1610?year=2016" target="_blank">竹の花</a></h2>
         <h2>問題の概要</h2>
-        <p></p>
+        <p>n個の区画にk年竹(m=&lt;k)を退屈な年ができるだけ訪れないよう植えるとき、何年持つかを出力せよ。</p>
 
         <h2>解説</h2>
-<div class="coding"><pre><code class="prettyprint">
-    </code></pre></div>
+        <p>問題の設定上、m年竹は必ず植えることになります。試しに２つ目のテストケースで実験してみましょう。</p>
+        <ul>
+          <li>設定：３年以上竹を４区画</li>
+          <li>1,2年目：何もなし</li>
+          <li>３年目：３年竹が咲く</li>
+          <li>４年目：４年竹が咲く</li>
+          <li>５年目：５年竹が咲く</li>
+          <li>６年目：３年竹が咲く(2周目)</li>
+          <li>７年目：７年竹が咲く</li>
+          <li>８年目：４年竹が咲く(2周目)</li>
+          <li>９年目：３年竹が咲く(3周目)</li>
+          <li>１０年目：５年竹が咲く(2周目)</li>
+          <li>１１年目：咲く竹が無くなった（終了）</li>
+        </ul>
+        <p>４区画を3,4,5,7年竹の4種類で使用しました。今のシミュレーションはだいぶ結果論的なものですが、イメージを掴むには十分でしょう。</p>
+        <p>さて、ここから分かるのは、使う竹の年数は大体素数ということです。上の例では、3,5,7年竹が素数の竹です。<br>ですが、素数でない4年竹も使われています。この理由が重要で、これは[3~4)の数字に4を割り切る数字が無いからです。つまり、4は「もしこの世に3以上の数しか存在しなければ」(実質)素数です。</p>
+        <p>このような（実質）素数について見れば、3,4,5,7の順で現れていて、5つ目の（実質）素数である11は区画が無いので植えられず、退屈な年になったのです。</p>
+        </p>
+        <p>このような考察のもとで、答えとなる出力は「m以上の自然数しか存在しないと仮定した時に、(区画数+1)番目の（実質）素数」ということになります。</p>
+
+        <p> では実装です。素数の調べ方で有名なものに、エラトステネスの篩があります。ある素数を１つ見つけたら、その倍数は素数ではないので消していくことを繰り返します。</p>
+<div class="coding"><pre><code class="prettyprint">void hurui(){
+  //素数を得たい範囲の最大値をmaxとすると
+  vector&lt;bool&gt; isPrime(max+1,true); //初めは全部素数だと仮定
+  isPrime[0]=isPrime[1]=false; //0と1は素数
+  for(int i=2;i&lt;=max;i++){
+    if(isPrime[i]){ //ある素数iを見つけたら
+      for(int j=i*2;j&lt;=max;j+=i){
+        isPrime[j]=false; //iの倍数をfalseに
+      }
+    }
+  }</code></pre></div>
+  <p>上記のコードでは、[0~max]についての素数を求めます。<code>isPrime[i]==true</code>となるようなiが素数です。</p>
+  <p>また、今回は問題文中で解が最大の場合を明記してあります。これにはちゃんと意図があって、篩における<code>max</code>を与えてくれています。さらに、上記では篩を適用する範囲の下限が0でしたが、今回はmを下限にします。よって、今回のエラトステネスの篩は[m-7368791]の範囲で行えば良いです。</p>
+  <p>最後ですが、求めるのは「(区画数+1)番目の（実質）素数」でした。エラトステネスの篩には<code>if(isPrime[i])</code>があります。これは文字通り素数を見つけたということなので、このif文が実行された回数を数えておいて、(区画数+1)回になったときの<code>i</code>を出力すれば、終了です。</p>
+  <p></p>
+
+  <div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+//エラトステネスの篩をしつつ、(区画数+1)番目の（実質）素数を返す関数
+int hurui(vector&lt;bool&gt;&amp; isPrime, int m, int n){ //nが区画数、mは範囲の下限
+  int count=0; //何回素数を見つけたか
+  for(int i=m;i&lt;=7368791+1;i++){ //[m-max]の範囲で篩にかける
+    if(isPrime[i]){ //素数iを見つけたら
+      count++;
+      if(count==n+1){ //見つけたのがn+1番目の素数なら戻り値に
+        return i;
+      }
+      for(int j=i;j&lt;7368791+1;j+=i){ //iの倍数をfalseに
+        isPrime[j]=false;
+      }
+    }
+  }
+}
+
+int main (){
+  int m,n;
+  while(cin&gt;&gt;m&gt;&gt;n &amp;&amp; m &amp;&amp; n){
+    vector&lt;bool&gt; isPrime(7368791+1,true); //最初は全て素数だと仮定
+    cout&lt;&lt; hurui(isPrime,m,n) &lt;&lt;endl;
+  }
+}</code></pre></div>
+<a href="../../index.html">トップに戻る</a>
     </div>
     
 

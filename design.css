@@ -1,6 +1,5 @@
 body{
     background:#dddddd;
-    
 }
 
 .indexcontent{
@@ -40,7 +39,7 @@ h2 {
 
 .coding{
     background-color: #eeeeee;
-    padding:10px 10px;
+    padding:0px 10px;
     border-radius: 10px;
     font-size:16px;
     line-height: 25px;
