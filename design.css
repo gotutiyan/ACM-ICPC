@@ -49,6 +49,7 @@ h2 {
     line-height: 25px;
     overflow:scroll;
 }
+
 code{
     -moz-tab-size: 2 ;	/* Firefox用 */
 	tab-size: 2 ;
