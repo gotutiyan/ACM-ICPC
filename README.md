@@ -28,7 +28,7 @@ https://gotutiyan.github.io/ACM-ICPC/
 <br>旧AOJ。会津大学のオンラインジャッジです。上のタブの「Problem」→「Vol.16」のあたりにICPCの国内予選の問題があります。後述するnew AOJもあります。
 </p>
 
-<p class="text>
+<p class="text">
 <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources">new AOJ</a>
 <br>新AOJ。旧AOJに比べて問題の場所がわかりやすくなりました。リンク先のICPCタブの「Prelim」から国内予選の問題が閲覧・解答できます。「Regional」の方は、国内予選を突破した次にあるアジア予選の問題です。
 </p>
