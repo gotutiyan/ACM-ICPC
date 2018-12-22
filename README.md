@@ -1,8 +1,10 @@
+<head>
 <style type="text/css">
 .text{
     text-indent: 1em;
 }
 </style>
+</head>
 <h2 style="border-bottom-style: double">このリポジトリについて</h2>
 <p>
 Gotutiyanが、ACM-ICPCの問題を解いて、その解説を残しているものです。
