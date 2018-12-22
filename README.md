@@ -1,5 +1,5 @@
 <style type="text/css">
-.class{
+.text{
     text-indent: 1em;
 }
 </style>
