@@ -5,9 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title></title>
+    <title>2015-A</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../design.css">
+    <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -19,13 +20,51 @@
   <body>
     <div class="content">
         <a href="../../index.html">トップに戻る</a>
-        <h2>問題: <a href="8" target="_blank"></a></h2>
+        <h2>2015-A 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1600?year=2015" target="_blank">入学試験</a></h2>
         <h2>問題の概要</h2>
-        <p></p>
-
+        <p>M個の整数が与えられるので、[min~max]の範囲で整数Pをとり、成績の良い順に上からP番目までを合格としたとき、ギャップの大きさが最大となるようなPを出力せよ。</p>
+      
         <h2>解説</h2>
-<div class="coding"><pre><code class="prettyprint">
-    </code></pre></div>
+        <p>ギャップの定義を飲み込む所に一番時間がかかりそうです。成績の良し悪しは点数で決まり、そこからminとmaxの範囲で整数Pをとったときに、成績順でP番目まで合格、それ以外は不合格になります。このとき、合格の最低点と不合格の最高点の差をギャップと呼びます。</p>
+        <p>この定義を飲み込みさえすればP(min&lt;=P&lt;=max)について、P番目とP+1番目の差を、minからmaxまで全て見ていけば良いことがわかります。制約から 配列の要素数が0&lt;=m&lt;=200なのに対し、maxは0&lt;=max&lt;200なので、P+1番目が配列外参照になることはありません。</p>
+        <p>実装としては、「成績の良い順にP番目」を簡単に得たいので、あらかじめ要素を昇順ソートすると良いです。このために、algorithmヘッダの<code>sort()</code>を使います。この関数にはイテレータと比較関数を渡せますが、比較関数の部分に<code>greater&lt;int&gt;()</code>を渡すと昇順ソートになります。</p>
+
+        <pre class="prettyprint linenums">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+int main (){
+  int n,min,max;
+  while(cin&gt;&gt;n&gt;&gt;min&gt;&gt;max &amp;&amp; n){
+    min--; max--; //添字に使うので0-indexにする
+    vector&lt;int&gt; v(n);
+    for(int i=0;i&lt;n;i++)cin&gt;&gt;v[i];
+    sort(v.begin(),v.end(),greater&lt;int&gt;()); //昇順ソート
+
+    int ans,gap=0; //出力用変数のans、ギャップを持つためのgap
+    for(int i=min;i&lt;=max;i++){
+      if(gap&gt;=v[i+1]-v[i]){ //ギャップが最大ならば
+        gap=v[i+1]-v[i];
+        ans=i+1; //ansを更新
+      }
+    }
+    cout&lt;&lt;ans&lt;&lt;endl;
+  }
+} </pre>
+
+    <p>余談ですが、今回sort()に渡す比較関数にgreater&lt;int&gt;()を用いましたが、これを自分で実装すれば以下のようになります。</p>
+    <pre class="prettyprint linenums">
+//比較関数を自作。return a&gt;bで昇順、a&lt;bで降順になる
+bool cmp(int a,int b){ 
+  return a&gt;b;
+}
+int main(){
+  //比較関数のところに自作関数名を渡す
+  sort(v.begin(),v.end(),cmp); 
+}
+    </pre>
     <a href="../../index.html">トップに戻る</a>
     </div>
     
@@ -34,8 +73,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
   </body>
   <fotter>
       <p></p>
