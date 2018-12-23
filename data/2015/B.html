@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>2015-B</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="content">
+        <a href="../../index.html">トップに戻る</a>
+        <h2>2015-B 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1601?year=2015" target="_blank">短句
+        </a></h2>
+        <h2>問題の概要</h2>
+        <p>文字列が複数与えられるので、それらを登場した順にいくつか組み合わせることで 5,7,5,7,7を作ることができる。このような短句の最初の単語番号を出力せよ。</p>
+
+        <h2>解説</h2>
+        <p>ある単語番号から見て短歌が成立するかをどう判定するかがキーです。5,7,5,7,7を満たさなければならないので、いくつか単語を連結させていって「5文字ぴったり」や「7文字ぴったり」というような処理を[5,7,5,7,7]の順で行うことができれば良いです。しかしこれをこのまま実装するのは少し大変なので、これらの文字数を累積させましょう。</p>
+        <p>{5,7,5,7,7}を{5,12,17,24,31}と変えてみます。こうすると、短歌の開始単語を１つずつずらしながら、その後ろに続く単語の文字数を単に足していくだけで判定できそうだということが分かります。</p>
+        <p>実装としては、文字数を累積させる変数をcountなどと作っておいて、文字数を足していき</p>
+        <ul>
+          <li>count==5になる</li>
+          <li>上記を満たした上でcount==12になる</li>
+          <li>上記を満たした上でcount==17になる</li>
+          <li>上記を満たした上でcount==24になる</li>
+          <li>上記を満たした上でcount==31になる</li>
+          <li>上記を満たせば短歌が見つかった</li>
+        </ul>
+        <p>と書くことができます。このとき、「上記を満たす」という処理は長さ5のbool型の配列を作っておき、「<span style="font-family: 'code-font'">bool[0,1,2,3,4]=countが[5,12,17,24,31]になったことがある</span>」と対応させれば良いです。</p>
+        <p>最後に、答えが見つかったあとforとwhileの2重ループを抜けないといけないので、やむを得ずgotoを使いました。</p>
+        <pre class="prettyprint linenums">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main (){
+  int n;
+  while(cin&gt;&gt;n &amp;&amp; n){
+      vector&lt;int&gt; v(n);
+      //文字列の長さを配列に格納
+      for(int i=0;i&lt;n;i++){
+          string s;
+          cin&gt;&gt;s;
+          v[i]=s.size();
+      }
+
+      for(int i=0;i&lt;n;i++){ //iは短歌判定をする先頭の単語番号
+          int count=0;
+          int j=i;
+          vector&lt;bool&gt; ok(5,false); //{5,7,5,7,7}の各ポイントをチェック
+          while(j&lt;=n-1){ //jは配列の範囲を超えないようにする
+              count+=v[j];
+              j++;
+              if(count==5)ok[0]=true; //まずは文字数合計が5になれば(5)
+              if(ok[0] &amp;&amp; count==12)ok[1]=true; //文字数合計が5になったことがある + 文字数合計が12になった(5,7)
+              if(ok[1] &amp;&amp; count==17)ok[2]=true; //(5,7,5)
+              if(ok[2] &amp;&amp; count==24)ok[3]=true; //(5,7,5,7)
+              if(ok[3] &amp;&amp; count==31)ok[4]=true; //(5,7,5,7,7)
+              if(ok[4]){ //短歌が見つかった
+                  cout&lt;&lt;i+1&lt;&lt;endl;
+                  goto END;
+              }
+          }
+      }
+      END:;
+  }
+
+}
+      </pre>
+    <a href="../../index.html">トップに戻る</a>
+    </div>
+    
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
+  </body>
+  <fotter>
+      <p></p>
+  </fotter>
+</html>

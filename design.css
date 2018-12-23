@@ -2,14 +2,25 @@
     font-family: 'code-font';
     src: url(./font/Myrica.TTC);
 }
-
+/*
 p{
     font-family: sans-serif;
 }
-
+*/
 
 pre{
-    font-family: code-font;
+    font-family: 'code-font';
+}
+p{
+    font-family: 'code-font';
+    line-height: 23px;
+    text-indent: 1em;
+}
+li{
+    font-family: 'code-font';
+}
+h2{
+    font-family: 'code-font';
 }
 
 body{
