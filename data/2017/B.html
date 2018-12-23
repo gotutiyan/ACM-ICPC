@@ -8,6 +8,7 @@
     <title>2017-B</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -40,7 +41,7 @@
         <p>ことに注意すると、ある変数(以下のコードではcount)を0で初期化し、文字列定数の間違いがあるごとに１足す、文字列定数以外の間違いがあるごとに２足す　ことにより、最終的にcount==1であればCLOSE、それ以外ならDIFFERENTであると判定できます。</p>
 
 
-<div class="coding"><pre><code class="prettyprint">
+        <pre class="prettyprint linenums">
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;string&gt;
@@ -88,7 +89,7 @@ int main (){
   }
 
 }
-    </code></pre></div>
+        </pre>
     <p>計算量は<code>O(n)</code>です。（nは文字列の長さなので、高々200) </p>
     <a href="../../index.html">トップに戻る</a>
     </div>
@@ -98,8 +99,9 @@ int main (){
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
   </body>
   <fotter>
       <p></p>

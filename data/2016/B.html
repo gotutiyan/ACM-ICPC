@@ -8,6 +8,7 @@
     <title>2016-B 当選者を探せ</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -29,7 +30,7 @@
         <p>実装としては、票数を管理する長さ26の配列を用意し、入力の文字<code>C</code>を利用して<code>[C-&#x27;A&#x27;]++</code>とすれば、配列の<code>[0,1,2,...,25]</code>に候補者<code>[A,B,C,...,Z]</code>が対応します。トップの得票数や2番目の得票数を得るには、この数列を<span style="color:red">降順</span>ソートして、0番目と1番目の要素を見れば良いです。</p>
         <p>ですが、単に得票数だけ持った数列をソートしても、トップや2番手の得票数は得られますが、その候補者が誰なのは分かりません。よって、構造体やstd::pairなどを利用して、得票数と候補者を常に紐つけておく必要があります。</p>
         <p>ここでさらに問題が起きて、構造体やpairなどを作ったはいいけど、それをどう降順ソートするかです。algorithmヘッダにある<code>sort()</code>でクイックソートを行ってくれますが、標準では昇順ソートです。<br>解決策として、sortには比較関数を渡すことができるので、ソートにおける交換条件を与えることができます。この比較関数に「得票数を昇順に」ということを書いてやれば良いです。</p>
-<div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+        <pre class="prettyprint linenums">#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;algorithm&gt;
 using namespace std;
@@ -66,7 +67,7 @@ int main (){
     }
     if(isTIE)cout&lt;&lt;&quot;TIE&quot;&lt;&lt;endl;
   }
-} </code></pre></div>
+} </pre>
 <a href="../../index.html">トップに戻る</a>
     </div>
     
@@ -75,8 +76,9 @@ int main (){
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
   </body>
   <fotter>
       <p></p>

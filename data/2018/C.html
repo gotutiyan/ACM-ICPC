@@ -8,6 +8,7 @@
     <title>2018-C</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -46,7 +47,8 @@
         </p>
         <p>以下のコードを参考に、今回のアルゴリズムを考えてみてください。</p>
         
-<div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+<pre class="prettyprint linenums">
+#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;string&gt;
 using namespace std;
@@ -69,8 +71,8 @@ int main (){
       }
     }
   }
-}</code></pre></div>
-    <p>右端を伸ばすところは<code>while(1)</code>でやってしまってます。これは答えとなるような区間が必ず存在する<span style="color:rgb(100,100,100)">(=いつかbreakされる)</span>からできることなので、不安なら<br><code>for(int right=0;right<=1000000000;right++)のようにしても良いかもしれません。</code></p>
+}</pre>
+    <p>右端を伸ばすところは<code>while(1)</code>でやってしまってます。これは答えとなるような区間が必ず存在する<span style="color:rgb(100,100,100)">(=いつかbreakされる)</span>からできることなので、不安なら<br><code>for(int right=0;right<=1000000000;right++)</code>のようにしても良いかもしれません。</p>
     <a href="../../index.html">トップに戻る</a>
     </div>
     
@@ -79,8 +81,9 @@ int main (){
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
   </body>
   <fotter>
       <p></p>

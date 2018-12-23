@@ -9,6 +9,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!--<link="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">-->
     <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,15 +28,13 @@
         <h2>解説</h2>
         <p>入力を数列に格納し、一旦全ての値を足して平均を取ったあと、条件を満たす要素数を求めます。<br>求まる平均は必ずしも整数であるとは限らないので、合計を貯めるための変数はdoubleなどの浮動小数点型にすることに注意です。</p>
         <p>また、「0」が来たら終了という処理は、while文を使って以下のように書けます。これはC++において<code>if(0)</code>のように条件式に0が入れば、その条件式は必ずfalseになり実行されないことを利用しています。</p>
-<div class="coding"><pre><code class="prettyprint">
-int n;
+        <pre class="prettyprint linenums">int n;
 while(cin&gt;&gt;n &amp;&amp; n){
     //処理
 
-}
-    </code></pre></div>
+}</pre>
         <p>これを踏まえて、解答例は以下のようになります。</p>
-<div class="coding"><pre><code class="prettyprint">
+        <pre class="prettyprint linenums">
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
 using namespace std;
@@ -58,7 +57,7 @@ int main (){
         cout&lt;&lt;ans&lt;&lt;endl;
     }
 }
-    </code></pre></div>
+    </pre>
     <p>計算量は<code>O(n)</code>で、十分に間に合います。</p>
     <a href="../../index.html">トップに戻る</a>
     </div>
@@ -68,8 +67,9 @@ int main (){
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
   </body>
   <fotter>
       <p></p>

@@ -1,9 +1,23 @@
-*{
+@font-face{
+    font-family: 'code-font';
+    src: url(./font/Myrica.TTC);
+}
+
+p{
     font-family: sans-serif;
+}
+
+
+pre{
+    font-family: code-font;
 }
 
 body{
     background:#dddddd;
+}
+
+#reference{
+    padding:0px 10px;
 }
 
 .indexcontent{
@@ -41,22 +55,28 @@ h2 {
     padding:0px 7px;   
 }
 
-.coding{
-    background-color: #eeeeee;
-    padding:0px 10px;
+pre{
+    padding:5px 10px;
     border-radius: 10px;
     font-size:16px;
     line-height: 25px;
     overflow:scroll;
+    font-family: "code-font";
 }
 
 code{
     -moz-tab-size: 2 ;	/* Firefox用 */
-	tab-size: 2 ;
+    tab-size: 2 ;
 }
+
+.text{
+    padding-left:1em;
+    text-indent: -1em;
+}
+
 
 /*
 code {
     font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
-  }
-  */
+}
+*/

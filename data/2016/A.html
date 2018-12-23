@@ -8,6 +8,7 @@
     <title></title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,13 +29,13 @@
         <p>このような手法を全探索と呼びます。今回は<code>1&lt;n&lt;1000</code>なので、<code>O(n<sup>2</sup>)</code>解が通ります。よってループを２重で回しながら、i番目とj番目の差を見て、答えを更新します。差はあくまで絶対値なのでabs()を使いましょう。</p>
 
         <p>また、「0」が来たら終了という処理は、while文を使って以下のように書けます。これはC++において<code>if(0)</code>のように条件式に0が入れば、その条件式は必ずfalseになり実行されないことを利用しています。</p>
-<div class="coding"><pre><code class="prettyprint">int n;
+        <pre class="prettyprint linenums">int n;
 while(cin&gt;&gt;n &amp;&amp; n){
     //処理
 
-}</code></pre></div>
+}</pre>
         <p>これを踏まえて、解答例は以下のようになります。</p>
-<div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+        <pre class="prettyprint linenums">#include &lt;iostream&gt;
 #include &lt;vector&gt;
 using namespace std;
 
@@ -54,7 +55,7 @@ int main (){
     }
     cout&lt;&lt;ans&lt;&lt;endl;
   }
-}</code></pre></div>
+}</pre>
 <a href="../../index.html">トップに戻る</a>
     </div>
     
@@ -63,8 +64,9 @@ int main (){
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
   </body>
   <fotter>
       <p></p>

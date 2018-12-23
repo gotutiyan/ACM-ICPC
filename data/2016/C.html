@@ -8,6 +8,7 @@
     <title>2016-C 竹の花</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,7 +46,7 @@
         <p>このような考察のもとで、答えとなる出力は「m以上の自然数しか存在しないと仮定した時に、(区画数+1)番目の（実質）素数」ということになります。</p>
 
         <p> では実装です。素数の調べ方で有名なものに、エラトステネスの篩があります。ある素数を１つ見つけたら、その倍数は素数ではないので消していくことを繰り返します。</p>
-<div class="coding"><pre><code class="prettyprint">void hurui(){
+        <pre class="prettyprint linenums">void hurui(){
   //素数を得たい範囲の最大値をmaxとすると
   vector&lt;bool&gt; isPrime(max+1,true); //初めは全部素数だと仮定
   isPrime[0]=isPrime[1]=false; //0と1は素数
@@ -55,13 +56,13 @@
         isPrime[j]=false; //iの倍数をfalseに
       }
     }
-  }</code></pre></div>
+  }</pre>
   <p>上記のコードでは、[0~max]についての素数を求めます。<code>isPrime[i]==true</code>となるようなiが素数です。</p>
   <p>また、今回は問題文中で解が最大の場合を明記してあります。これにはちゃんと意図があって、篩における<code>max</code>を与えてくれています。さらに、上記では篩を適用する範囲の下限が0でしたが、今回はmを下限にします。よって、今回のエラトステネスの篩は[m-7368791]の範囲で行えば良いです。</p>
   <p>最後ですが、求めるのは「(区画数+1)番目の（実質）素数」でした。エラトステネスの篩には<code>if(isPrime[i])</code>があります。これは文字通り素数を見つけたということなので、このif文が実行された回数を数えておいて、(区画数+1)回になったときの<code>i</code>を出力すれば、終了です。</p>
   <p></p>
 
-  <div class="coding"><pre><code class="prettyprint">#include &lt;iostream&gt;
+  <pre class="prettyprint linenums">#include &lt;iostream&gt;
 #include &lt;vector&gt;
 using namespace std;
 
@@ -87,7 +88,7 @@ int main (){
     vector&lt;bool&gt; isPrime(7368791+1,true); //最初は全て素数だと仮定
     cout&lt;&lt; hurui(isPrime,m,n) &lt;&lt;endl;
   }
-}</code></pre></div>
+}</pre>
 <a href="../../index.html">トップに戻る</a>
     </div>
     
@@ -96,8 +97,9 @@ int main (){
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
   </body>
   <fotter>
       <p></p>
