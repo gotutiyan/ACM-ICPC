@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>2014-A</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="content">
+        <a href="../../index.html">トップに戻る</a>
+        <h2>2014-A 問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1192?year=2014" target="_blank">税率変更</a></h2>
+        <h2>問題の概要</h2>
+        <p>税率がa,bの2種類与えられるので、aの税率において合計がs円となるような2つの品物の組み合わせのうち、bの税率で一番高くなるような組を求めよ。</p>
+
+        <h2>解説</h2>
+        <p>税込みの値段を求めるには、問題文にある通りp(100+x)/100とします。ここで2つの品物の値段をどうやって試していくかが問題ですが、2重ループを回していけば良いです。</p>
+        <p>外側のループiを1つ目の品物の値段、内側のループjを２つ目の品物の値段とします。2つの品物の値段がs円を超えることはないので、iとjはs-1まで回せば良いです。
+        <br> <span style="font-size:15px; line-height: 19px; color:rgb(138, 138, 138);">（s-1まで回すというのも、2つ合わせてs円ということは片方の品物だけでs円に達してしまうことはないので、最悪の偏りとしてs-1円と1円の品物になることが根拠です。)</span></p>
+        <p>このようにして考えうるiとjを全部試す中で、税率がxとなるような組み合わせであれば、税率がyである時も計算してみて、その最大値を更新すれば良いです。このような手法は全探索と呼ばれ、ICPCのA問題ではよく問われるテクニックです。</p>
+        <p>今回の問題では、sは高々1000=10<sup>3</sup>なので、2重ループを回してもO(n<sup>2</sup>)で10<sup>6</sup>程度にしかならず、間に合います。</p>
+        <pre class="prettyprint linenums">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main (){
+    int x,y,s;
+    while(cin&gt;&gt;x&gt;&gt;y&gt;&gt;s &amp;&amp; x){
+        int ans=0;
+        for(int i=1;i&lt;s;i++){ //1つ目の品物の税抜き値段
+            for(int j=1;j&lt;s;j++){ //2つ目の品物の税抜き値段
+                if(i*(100+x)/100+j*(100+x)/100==s){ //xの税率でs円になれば
+                    ans=max(ans,i*(100+y)/100+j*(100+y)/100); //税率をyに変えてansを更新
+                }
+            }
+        }
+        cout&lt;&lt;ans&lt;&lt;endl;
+    }
+
+}
+      </pre>
+    <a href="../../index.html">トップに戻る</a>
+    </div>
+    
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
+  </body>
+  <fotter>
+      <p></p>
+  </fotter>
+</html>
