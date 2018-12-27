@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>2014-B</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="content">
+        <a href="../../index.html">トップに戻る</a>
+        <h2>2014-B 問題:<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1193?year=2014" target="_blank">連鎖消滅パズル</a></h2>
+        <h2>問題の概要</h2>
+        <p>h*5の大きさのマス目に1~9の数字が書かれた石が置いてある。この石は「横方向に」3つ以上並ぶと消え、消えた石の上にある石は落下してくる。これを繰り返した時、得られるスコアはいくつか出力せよ。</p>
+
+        <h2>解説</h2>
+        <p>まずは「3つ以上並ぶ」ことをどう検知するかですが、while(v[i][j]==v[i][j+1])のようにすれば隣り合う数字が同じという状態を得られるので、これをjを増やしながら行った結果、同じwhileの中で2回以上jが増えるかどうかで判定できます。下記のコードでは、このjが増えた回数をchainという変数で持っています。</p>
+        <p>さらに、この後石の落下処理をするにあたって、「この石はもう消えた」という情報を持っておく必要があるので、消えた石の数字は-1に変えます。消えたかどうかは上記の通り一度jを進めてみないとわからないので、消えたことがわかれば変数chainを使ってもう一度ループを回して-1を代入します。（消えるかどうかの検知と、 -1を代入する処理は同時には行えないということです。）</p>
+        <p>最後に落下処理ですが、「まだ消えてない石が落下する」と「すでに消えた石が上昇する」のどちらでもいいです。筆者は後者を選択しました。-1の石を見れば、一番上まで上げることをします。この処理に置いては、配列を縦に回します。ただし、1回この操作をしたところで全ての-1が上がりきらないので、h回この操作をすれば確実だろうということでh回行います。</p>
+        <p>これら一覧の流れを、消す石がなくなるまで続けます。</p>
+        
+        <h4>配列の回し方、横と縦</h4>
+        <p>（ここで書くようはことではないかもしれませんが）これは筆者のすごく個人的な見解ですが、配列の回し方には横と縦があると思っています。</p>
+        <pre class="prettyprint linenums" style="display:inline-block;">
+//横
+int v[10][5];
+for(int i=0;i&lt;10;i++){
+  for(int j=0;j&lt;5;j++){
+    v[i][j]の処理
+  }
+} </pre>
+<img style="display: inline-block;" src="yoko.png" width="150" height="150">
+<p style="display: inline-block;">本問では石を消す処理に使います。</p>
+<p></p>
+<pre class="prettyprint linenums" style="display:inline-block;">
+//縦
+int v[10][5];
+for(int i=0;i&lt;5;i++){
+  for(int j=0;j&lt;10;j++){
+    v[j][i]の処理
+  }
+}</pre>
+<img style="display:inline-block" src="tate.png" width="150" height="150">
+<p style="display: inline-block;">本問では落下処理をするのに使います。</p>
+        
+<p>以上のことから、解答例は以下のようになります。</p>
+        <pre class="prettyprint linenums">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main (){
+  int h;
+  while(cin&gt;&gt;h &amp;&amp; h){
+    vector&lt;vector&lt;int&gt;&gt; v(h,vector&lt;int&gt;(5));
+    for(int i=0;i&lt;h;i++)for(int j=0;j&lt;5;j++)cin&gt;&gt;v[i][j];//入力
+    int ans=0;
+    while(1){
+      int flag=true; //消す石があったらtrueのまま
+      //以下、３個以上並ぶところを消す処理
+      for(int i=0;i&lt;h;i++){
+        int chain; //同じ数字が並ぶ数
+        for(int j=0;j&lt;5;j++){
+          chain=1;
+          while(j+1&lt;5 &amp;&amp; v[i][j]!=-1 &amp;&amp; v[i][j]==v[i][j+1]){
+            chain++;
+            j++;
+          }
+          if(chain&gt;=3){ //3つ以上並んでいたら
+            flag=false;
+            ans+=chain*v[i][j];
+            for(int k=0;k&lt;chain;k++){ //その部分を-1に変える
+              v[i][j-chain+k+1]=-1;
+            }
+            break;
+          }
+        }
+      }
+      if(flag)break; //消す石が無かったなら終了
+
+      
+      for(int p=0;p&lt;h;p++){ //下記処理をh回行えば完璧に処理できるだろう
+        //以下は落下処理で、-1を上にあげるイメージ
+        for(int i=0;i&lt;5;i++){
+          for(int j=h-1;j&gt;=1;j--){
+            if(v[j][i]==-1){
+              for(int k=j;k&gt;=1;k--)swap(v[k][i],v[k-1][i]);
+            }
+          }
+        }
+      }
+    }
+    cout&lt;&lt;ans&lt;&lt;endl;
+  }
+}</pre>
+    <a href="../../index.html">トップに戻る</a>
+    </div>
+    
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
+  </body>
+  <fotter>
+      <p></p>
+  </fotter>
+</html>

@@ -21,6 +21,12 @@ li{
 }
 h2{
     font-family: 'code-font';
+    border-left: solid 7px #bb0000 ;
+    padding:0px 7px;  
+}
+h4{
+    font-family: 'code-font';
+    border-left: solid 3px #bb0000 ;
 }
 
 body{
@@ -59,11 +65,6 @@ body{
 
 .sentence{
     padding: 20px;
-}
-
-h2 {
-    border-left: solid 7px #bb0000 ;
-    padding:0px 7px;   
 }
 
 pre{
