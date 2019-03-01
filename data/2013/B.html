@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>2013-B</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../design.css">
+    <link rel="stylesheet" href="../../prettify/prettify.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="content">
+        <a href="../../index.html">トップに戻る</a>
+        <h2>問題: <a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/ICPC/Prelim/1187?year=2013" target="_blank">ICPCの順位付け</a></h2>
+        <h2>問題の概要</h2>
+        <p>提出記録が与えられるので、以下のルールに基づいて順位づけをした結果を出力せよ。
+          <ul>
+            <li>正解した問題数が多いほど順位が高い</li>
+            <li>正解数が同じならば、所要時間が短い方が順位が高い。ここで所要時間とは、各問題について、(その問題を解くのにかかった時間)+(不正解の回数*20分)で表される時間である。</li>
+            <li>問題数と所要時間が同じ場合同順位とし、出力はチーム番号が大きい方から行う。</li>
+          </ul>
+        </p>
+
+        <h2>解説</h2>
+        <p>考える情報が複数あるので、構造体でまとめてしまいましょう。さらにそれの配列を考えて、ソートする時の比較関数を自作します。出力方法も初見では迷うかもしれません。
+          <br><br>まずはチームごとに持つ情報として、チーム番号(整数)、各問題の誤答数(整数配列)、各問題を正解したかどうか(0-1(真偽値)配列)、全体の所要時間(整数)、最後に全体の正解数(整数)です。これを構造体として持てば、扱いやすくなりそうです。この構造体の配列を考えた時、チームiのj番の問題に対する情報はhoge[i].hege[j]のように書くことができます。
+          <br>そして、入力によりこの値を更新していきます。方針としては、誤答数は普通に数えておいて、正解すれば、その時の入力の所要時間と、その問題の誤答数*20を足していく形です。
+          <br><br>このようにして集計したデータを順位付けしますが、いくつかの条件を満たしたソートになります。よって、比較関数を自作して、標準ライブラリのsort()に渡す形にします。同順位であればチーム番号が大きい順に出力することなどに注意します。比較関数を自作する時は不等号に迷うかもしれませんが、昇順にしたかったら&lt;、降順にしたかったら&gt;の比較結果をreturnすれば良いです。
+           今回はチーム番号と問題正解数を昇順、所要時間を降順にします。
+
+           <br><br>最後に出力ですが、同じものは=で繋がなければなりません。配列のi番目とi+1番目を見て、問題正解数と所要時間が同じであれば同順位なので=でつなぐ、などの実装が考えられます。
+        </p>
+        <pre class="prettyprint linenums">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+struct S{
+  int number;
+  int AC[10]={},WA[10]={},time=0;
+  int sumAC=0;
+};
+bool cmp(S a,S b){
+  if(a.sumAC==b.sumAC){
+      if(a.time==b.time)return a.number&gt;b.number;
+      return a.time&lt;b.time;
+  }
+  return a.sumAC&gt;b.sumAC;
+
+}
+signed main (){
+  int M,T,P,R;
+  while(cin&gt;&gt;M&gt;&gt;T&gt;&gt;P&gt;&gt;R&amp;&amp;M){
+    vector&lt;S&gt; v(T);
+    for(int i=0;i&lt;T;i++)v[i].number=i+1; //まずは番号を入れる
+    for(int i=0;i&lt;R;i++){
+      int m,t,p,j;
+      cin&gt;&gt;m&gt;&gt;t&gt;&gt;p&gt;&gt;j;
+      t--;p--; //0-indexに
+      if(j==0){ //正解なら
+          v[t].AC[p]++;
+          v[t].time+=v[t].WA[p]*20;
+          v[t].time+=m;
+      }
+      else v[t].WA[p]++; //誤答なら
+    }
+    for(int i=0;i&lt;T;i++){
+      for(int j=0;j&lt;P;j++){
+        v[i].sumAC+=v[i].AC[j]; //各チームの正解数を求める
+      }
+    }
+    sort(v.begin(),v.end(),cmp); //上で書いた比較関数cmpを使ってソート。配列の中身が強い順になる
+
+    for(int i=0;i&lt;T;i++){
+      cout&lt;&lt;v[i].number;
+      while(i+1&lt;T&amp;&amp;v[i].sumAC==v[i+1].sumAC&amp;&amp;v[i].time==v[i+1].time){ //順位が同じ時の処理
+          i++;
+          cout&lt;&lt;'='&lt;&lt;v[i].number;
+      }
+      if(i!=T-1)cout&lt;&lt;','; //最後はカンマ打ちません
+    }
+    cout&lt;&lt;endl;
+  }
+}
+      </pre>
+    <a href="../../index.html">トップに戻る</a>
+    </div>
+    
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./site.js"></script>
+    <script src="../../prettify/prettify.js"></script>
+    <script>prettyPrint();</script>
+  </body>
+  <fotter>
+      <p></p>
+  </fotter>
+</html>
